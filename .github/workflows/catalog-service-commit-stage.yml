@@ -1,5 +1,16 @@
-name: Commit Stage
-on: push
+name: Catalog Service - Commit Stage
+
+on:
+  push:
+    branches: [ "main" ]
+    # This filter is KEY. It ensures this specific workflow ONLY runs
+    # when files inside the 'catalog-service' folder are changed.
+    paths:
+      - 'catalog-service/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'catalog-service/**'
 
 jobs:
   build:
@@ -11,23 +22,32 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '25'
           cache: 'maven'
+          # Point to the specific pom.xml for caching
+          cache-dependency-path: catalog-service/pom.xml
+
       - name: Build, unit tests and integration tests
         run: |
+          # Navigate into the specific service directory before running commands
+          cd catalog-service
           chmod +x mvnw
           ./mvnw clean verify
+
       - name: Code vulnerability scanning
         uses: anchore/scan-action@v3
         id: scan
         with:
-          path: "${{ github.workspace }}"
+          # Scan only the specific service directory
+          path: "${{ github.workspace }}/catalog-service"
           fail-build: false
           severity-cutoff: high
+
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v2
         if: success() || failure()
