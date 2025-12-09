@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 //@DataJdbcTest(properties = "spring.cloud.config.enabled=false")
 @DataJdbcTest
@@ -43,13 +42,13 @@ class BookRepositoryTest {
 
     @Test
     void findBookByIsbnWhenNotExisting() {
-        Optional<Book> actualBook = bookRepository.findByIsbn("1234561238");
+        Optional<Book> actualBook = bookRepository.findByIsbn("1234561277");
         assertThat(actualBook).isEmpty();
     }
 
     @Test
     void existsByIsbnWhenExisting() {
-        var bookIsbn = "1234561239";
+        var bookIsbn = "1234571239";
         var bookToCreate = Book.of(bookIsbn, "Title", "Author", 12.90);
         jdbcAggregateTemplate.insert(bookToCreate);
 
