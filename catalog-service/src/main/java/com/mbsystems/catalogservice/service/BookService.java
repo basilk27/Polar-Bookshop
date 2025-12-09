@@ -21,7 +21,7 @@ public class BookService {
 
     public Book viewBookDetails(String isbn) {
         return bookRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new BookNotFoundException(isbn + " was not found."));
+                .orElseThrow(() -> new BookNotFoundException(isbn + " was not found 2."));
     }
 
     public Book addBookToCatalog(Book book) {
