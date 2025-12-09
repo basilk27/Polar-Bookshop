@@ -49,10 +49,17 @@ jobs:
           severity-cutoff: high
           output-format: sarif
 
+      - name: Debug - locate SARIF reports
+        if: success() || failure()
+        run: |
+          echo "Searching for SARIF files from repo root:"
+          find . -type f -name "*.sarif" -print || true
+          echo "\nListing anchore-reports directories:"
+          find . -type d -name "anchore-reports" -print || true
+
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          # Anchore writes reports under the scanned path; since we scan
-          # catalog-service, the SARIF ends up in that subfolder.
-          sarif_file: catalog-service/anchore-reports/*.sarif
+          # Use a robust glob to find SARIF reports regardless of exact output location
+          sarif_file: "**/anchore-reports/*.sarif"
