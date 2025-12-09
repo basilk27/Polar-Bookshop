@@ -53,4 +53,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          sarif_file: anchore-reports/*.sarif
+          # Anchore writes reports under the scanned path; since we scan
+          # catalog-service, the SARIF ends up in that subfolder.
+          sarif_file: catalog-service/anchore-reports/*.sarif
