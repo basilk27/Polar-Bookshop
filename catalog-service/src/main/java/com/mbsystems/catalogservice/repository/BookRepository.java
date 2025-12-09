@@ -1,19 +1,20 @@
 package com.mbsystems.catalogservice.repository;
 
 import com.mbsystems.catalogservice.entity.Book;
+import org.springframework.data.jdbc.repository.query.Modifying;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-public interface BookRepository {
-
-    Iterable<Book> findAll();
+@Repository
+public interface BookRepository extends CrudRepository<Book, Long> {
 
     Optional<Book> findByIsbn(String isbn);
 
     boolean existsByIsbn(String isbn);
 
-    Book save(Book book);
-
+    @Transactional
     void deleteByIsbn(String isbn);
-
 }
