@@ -49,6 +49,16 @@ jobs:
           severity-cutoff: high
           output-format: sarif
 
+      # Deterministically generate a SARIF report using Grype and write it to a known path
+      - name: Generate SARIF with Grype
+        if: success() || failure()
+        run: |
+          echo "Installing grype..."
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype version || true
+          echo "Scanning catalog-service directory and writing SARIF..."
+          grype dir:catalog-service -o sarif > catalog-service/security-report.sarif || true
+
       - name: Debug - locate SARIF reports
         if: success() || failure()
         run: |
@@ -61,5 +71,5 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          # Use a robust glob to find SARIF reports regardless of exact output location
-          sarif_file: "**/anchore-reports/*.sarif"
+          # Upload the deterministically generated SARIF report
+          sarif_file: catalog-service/security-report.sarif
