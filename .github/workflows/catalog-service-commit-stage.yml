@@ -1,5 +1,4 @@
-name: Catalog Service - Commit Stage
-
+name: Commit Stage
 on:
   push:
     branches: [ "main" ]
@@ -22,34 +21,30 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '25'
-          cache: 'maven'
+          distribution: temurin
+          java-version: 25
+          cache: maven
           # Point to the specific pom.xml for caching
           cache-dependency-path: catalog-service/pom.xml
-
       - name: Build, unit tests and integration tests
         run: |
           # Navigate into the specific service directory before running commands
           cd catalog-service
           chmod +x mvnw
           ./mvnw clean verify
-
       - name: Code vulnerability scanning
         uses: anchore/scan-action@v4
         id: scan
         with:
-          # Scan only the specific service directory
           path: "${{ github.workspace }}/catalog-service"
           fail-build: false
           severity-cutoff: high
           output-format: sarif
 
-      # Deterministically generate a SARIF report using Grype and write it to a known path
+          # Deterministically generate a SARIF report using Grype and write it to a known path
       - name: Generate SARIF with Grype
         if: success() || failure()
         run: |
@@ -71,5 +66,5 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          # Upload the deterministically generated SARIF report
+          # BMK sarif_file: ${{ steps.scan.outputs.sarif }}
           sarif_file: catalog-service/security-report.sarif
