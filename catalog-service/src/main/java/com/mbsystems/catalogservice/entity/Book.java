@@ -8,11 +8,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
-@Table("books")
 public record Book(
 
         @Id
@@ -40,7 +38,7 @@ public record Book(
 
         @Version
         int version
-        ) {
+) {
     public static Book of(String isbn, String title, String author, Double price) {
         return new Book(null, isbn, title, author, price, null, null, 0);
     }

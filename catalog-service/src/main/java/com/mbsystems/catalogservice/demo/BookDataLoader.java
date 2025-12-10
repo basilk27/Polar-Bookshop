@@ -23,7 +23,7 @@ public class BookDataLoader {
 
         var book1 = Book.of("1234567891", "Northern Lights", "Lyra Silverstar", 9.90);
 
-        var book2 = Book.of("1234567892", "The Hobbit", "Basil Kiwanuka", 12.99);
+        var book2 = Book.of("1234567892", "The Hobbit", "Iorek Polarson", 12.99);
 
         this.bookRepository.saveAll(List.of(book1, book2));
     }

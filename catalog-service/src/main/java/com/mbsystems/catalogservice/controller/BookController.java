@@ -16,28 +16,28 @@ public class BookController {
 
     @GetMapping
     public Iterable<Book> get() {
-        return bookService.viewBookList();
+        return this.bookService.viewBookList();
     }
 
     @GetMapping("{isbn}")
     public Book getByIsbn(@PathVariable String isbn) {
-        return bookService.viewBookDetails(isbn);
+        return this.bookService.viewBookDetails(isbn);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book post(@Valid @RequestBody Book book) {
-        return bookService.addBookToCatalog(book);
+        return this.bookService.addBookToCatalog(book);
     }
 
     @DeleteMapping("{isbn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String isbn) {
-        bookService.removeBookFromCatalog(isbn);
+        this.bookService.removeBookFromCatalog(isbn);
     }
 
     @PutMapping("{isbn}")
     public Book put(@PathVariable String isbn, @Valid @RequestBody Book book) {
-        return bookService.editBookDetails(isbn, book);
+        return this.bookService.editBookDetails(isbn, book);
     }
 }

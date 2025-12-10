@@ -4,39 +4,38 @@ import com.mbsystems.catalogservice.entity.Book;
 import com.mbsystems.catalogservice.exception.BookAlreadyExistsException;
 import com.mbsystems.catalogservice.exception.BookNotFoundException;
 import com.mbsystems.catalogservice.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     public Iterable<Book> viewBookList() {
         return this.bookRepository.findAll();
     }
 
     public Book viewBookDetails(String isbn) {
-        return bookRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new BookNotFoundException(isbn + " was not found 2."));
+        return this.bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new BookNotFoundException(isbn));
     }
 
     public Book addBookToCatalog(Book book) {
-        if (bookRepository.existsByIsbn(book.isbn())) {
+        if (this.bookRepository.existsByIsbn(book.isbn())) {
             throw new BookAlreadyExistsException(book.isbn());
         }
+
         return bookRepository.save(book);
     }
 
     public void removeBookFromCatalog(String isbn) {
-        bookRepository.deleteByIsbn(isbn);
+        this.bookRepository.deleteByIsbn(isbn);
     }
 
     public Book editBookDetails(String isbn, Book book) {
-        return bookRepository.findByIsbn(isbn)
+        return this.bookRepository.findByIsbn(isbn)
                 .map(existingBook -> {
                     var bookToUpdate = new Book(
                             existingBook.id(),
@@ -47,7 +46,7 @@ public class BookService {
                             existingBook.createdDate(),
                             existingBook.lastModifiedDate(),
                             existingBook.version());
-                    return bookRepository.save(bookToUpdate);
+                    return this.bookRepository.save(bookToUpdate);
                 })
                 .orElseGet(() -> addBookToCatalog(book));
     }
