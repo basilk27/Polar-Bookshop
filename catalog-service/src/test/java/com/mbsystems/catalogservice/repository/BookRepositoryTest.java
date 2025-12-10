@@ -29,7 +29,7 @@ class BookRepositoryTest {
     @Test
     void findBookByIsbnWhenExisting() {
         var bookIsbn = "1234561237";
-        var book = Book.of(bookIsbn, "Title", "Author", 12.90);
+        var book = Book.of(bookIsbn, "Title", "Author", 12.90, "Manning");
 
         this.jdbcAggregateTemplate.insert(book);
 
@@ -48,7 +48,7 @@ class BookRepositoryTest {
     @Test
     void existsByIsbnWhenExisting() {
         var bookIsbn = "1234571239";
-        var bookToCreate = Book.of(bookIsbn, "Title", "Author", 12.90);
+        var bookToCreate = Book.of(bookIsbn, "Title", "Author", 12.90, "Manning");
         jdbcAggregateTemplate.insert(bookToCreate);
 
         boolean existing = bookRepository.existsByIsbn(bookIsbn);
@@ -65,7 +65,7 @@ class BookRepositoryTest {
     @Test
     void deleteByIsbn() {
         var bookIsbn = "1234561241";
-        var bookToCreate = Book.of(bookIsbn, "Title", "Author", 12.90);
+        var bookToCreate = Book.of(bookIsbn, "Title", "Author", 12.90, "Manning");
         var persistedBook = jdbcAggregateTemplate.insert(bookToCreate);
 
         bookRepository.deleteByIsbn(bookIsbn);
