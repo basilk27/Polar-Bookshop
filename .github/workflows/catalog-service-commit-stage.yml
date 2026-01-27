@@ -66,6 +66,7 @@ jobs:
       contents: read
       packages: write
       security-events: write
+      id-token: write
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -96,7 +97,7 @@ jobs:
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: Log in to the Container registry
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
