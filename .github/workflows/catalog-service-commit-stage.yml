@@ -16,6 +16,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: basilk27/catalog-service
   VERSION: latest
+  OCI_SCAN_SARIF_PATH: ${{ github.workspace }}/oci-scan.sarif
 
 jobs:
   build:
@@ -109,12 +110,12 @@ jobs:
           fail-build: false
           severity-cutoff: high
           output-format: 'sarif'
-          output-file: oci-scan.sarif
+#          output-file: ${{ github.workspace }}/oci-scan.sarif
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          sarif_file: oci-scan.sarif
+          sarif_file: ${{ github.workspace }}/oci-scan.sarif
       - name: Log in to the Container registry
         uses: docker/login-action@v2.0.0
         with:
