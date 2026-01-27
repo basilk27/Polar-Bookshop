@@ -1,5 +1,6 @@
 name: Commit Stage
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
     # This filter is KEY. It ensures this specific workflow ONLY runs
